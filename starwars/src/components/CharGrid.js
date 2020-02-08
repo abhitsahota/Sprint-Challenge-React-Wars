@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import {Container, Row, } from "reactstrap";
+import {Container, Row, Col } from "reactstrap";
 import CharCard from "./Card.js"
 
  const CharGrid = () => {
 
-    initialState = [];
+    let initialState = [];
     const [pplData, setpplData] = useState(initialState);
     let pplVal = ''
 
@@ -14,20 +14,27 @@ import CharCard from "./Card.js"
         axios
             .get(`https://swapi.co/api/people/${pplVal}`)
             .then(response => {
-                setpplData(response.data)
+                setpplData(response.data.results)
+                console.log(pplData)
             })
             .catch(error => console.log(error))
     };
 
     useEffect(useEffectFn, [])
 
-    console.log("set of peeople", pplData)
+    let peopleCards = pplData.map(person => {
+        return (
+            <Col xs="4">
+                <CharCard data={person}/>
+            </Col>
+        )
+    })
 
     return (
         <div>
-            <Container>
+            <Container className='.d-flex'>
                 <Row>
-                    <CharCard data={pplData} />
+                        {peopleCards}
                 </Row>
             </Container>
         </div>
